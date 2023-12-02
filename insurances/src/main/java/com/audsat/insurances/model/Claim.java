@@ -1,5 +1,6 @@
 package com.audsat.insurances.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
@@ -14,7 +15,12 @@ import javax.persistence.ManyToOne;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
-public class Claim {
+public class Claim implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6424695191215598338L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

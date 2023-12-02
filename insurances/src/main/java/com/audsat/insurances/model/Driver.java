@@ -1,5 +1,6 @@
 package com.audsat.insurances.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -16,7 +17,12 @@ import javax.validation.constraints.NotEmpty;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
-public class Driver {
+public class Driver implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6141396404890168852L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

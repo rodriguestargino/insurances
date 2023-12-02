@@ -1,5 +1,6 @@
 package com.audsat.insurances.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import javax.persistence.Entity;
@@ -8,7 +9,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Insuranse {
+public class Insuranse implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8992909347886365373L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

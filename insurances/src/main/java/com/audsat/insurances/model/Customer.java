@@ -1,5 +1,6 @@
 package com.audsat.insurances.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
@@ -20,7 +21,12 @@ import org.hibernate.validator.constraints.br.CPF;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
-public class Customer {
+public class Customer implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1288462622002229765L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

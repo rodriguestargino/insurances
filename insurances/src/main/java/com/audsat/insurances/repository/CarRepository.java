@@ -6,17 +6,19 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.audsat.insurances.model.Insurance;
+import com.audsat.insurances.model.Car;
 
 @Repository
-public interface InsuranceBudgetRepository extends JpaRepository<Insurance, Long> {
+public interface CarRepository extends JpaRepository<Car, Long> {
 
-	Optional<Insurance> findById(Long id);
+	Optional<Car> findById(Long id);
+	
+	Optional<Car> findByPlaca(String placa);
 
-	List<Insurance> findAll();
+	List<Car> findAll();
 
 	@SuppressWarnings("unchecked")
-	Insurance save(Insurance insuranceBudgetProposal);
+	Car save(Car car);
 
 	void deleteById(Long id);
 }

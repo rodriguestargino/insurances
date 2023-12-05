@@ -17,7 +17,7 @@ import javax.validation.constraints.NotEmpty;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
-public class Driver implements Serializable{
+public class Driver implements Serializable {
 
 	/**
 	 * 
@@ -27,27 +27,24 @@ public class Driver implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+
 	@Column(name = "document", length = 100)
 	@NotEmpty(message = "{campo.customer.document.obrigatorio}")
 	private String document;
-	
+
 	@Column(name = "birthdate")
 	private LocalDate birthdate;
 
-	 @ManyToMany
-	 @JoinTable(
-	             name = "car_driver",
-	             joinColumns = @JoinColumn(name = "driver_id"),
-	             inverseJoinColumns = @JoinColumn(name = "car_id")
-	     )
-	private List<Car> cars; // List of cars associated with this driver
-	
+	@ManyToMany
+	@JoinTable(name = "driver_cars", joinColumns = { @JoinColumn(name = "driver_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "car_id") })
+	private List<Car> cars;
+
 	@Column(name = "data_cadastro", updatable = false)
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate dataCadastro;
-	
-    public Long getId() {
+
+	public Long getId() {
 		return id;
 	}
 

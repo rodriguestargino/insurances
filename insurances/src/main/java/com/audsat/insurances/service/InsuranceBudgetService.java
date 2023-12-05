@@ -2,18 +2,18 @@ package com.audsat.insurances.service;
 
 import java.util.List;
 
-import com.audsat.insurances.model.InsuranceBudget;
+import com.audsat.insurances.bean.InsuranceBudgetProposalBean;
+import com.audsat.insurances.model.Insurance;
 
 public interface InsuranceBudgetService {
 
-	InsuranceBudget createInsuranceBudgetProposal(String proposedCoverage, double estimatedCost,
-			String justification);
+	Insurance createInsuranceBudgetProposal(InsuranceBudgetProposalBean insuranse);
 
-	InsuranceBudget getInsuranceBudgetProposalById(long id);
+	Insurance getInsuranceBudgetProposalById(long id);
 
-	List<InsuranceBudget> getAllInsuranceBudgetProposals();
+	List<Insurance> getAllInsuranceBudgetProposals();
 
-	void updateInsuranceBudgetProposal(InsuranceBudget insuranceBudgetProposal);
+	void updateInsuranceBudgetProposal(Insurance insuranceBudgetProposal);
 
 	void deleteInsuranceBudgetProposalById(long id);
 

@@ -1,9 +1,7 @@
 package com.audsat.insurances.model;
 
 import java.io.Serializable;
-import java.sql.Driver;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -19,7 +17,7 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
-public class Car implements Serializable{
+public class Car implements Serializable {
 
 	/**
 	 * 
@@ -29,46 +27,51 @@ public class Car implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+
 	@Column(name = "model", length = 100)
-	@NotEmpty(message = "{campo.customer.model.obrigatorio}")
+	@NotEmpty(message = "{campo.car.model.obrigatorio}")
 	private String model;
-	
-	@NotEmpty(message = "{campo.customer.model.manufacturer.obrigatorio}")
+
+	@NotEmpty(message = "{campo.car.model.manufacturer.obrigatorio}")
 	@Column(name = "manufacturer", nullable = false)
 	@NotNull
 	private String manufacturer;
 	
-	@NotEmpty(message = "{campo.customer.model.year.obrigatorio}")
+	@NotEmpty(message = "{campo.car.model.palca.obrigatorio}")
+	@Column(name = "placa", nullable = false)
+	@NotNull
+	private String placa;
+
+	@NotNull(message = "{campo.car.model.year.obrigatorio}")
 	@Column(name = "year", nullable = false)
 	@NotNull
-    private int year;
-    
-	@NotEmpty(message = "{campo.customer.model.fipeValue.obrigatorio}")
+	private Integer year;
+
+	@NotNull(message = "{campo.car.model.fipeValue.obrigatorio}")
 	@Column(name = "fipeValue", nullable = false)
 	@NotNull
-	private double fipeValue;
-    
+	private Double fipeValue;
+
     @ManyToMany(mappedBy = "cars")
-	private List<Driver> drivers; // List of drivers associated with this car
-	
+	private List<Driver> drivers;
+
 	@Column(name = "data_cadastro", updatable = false)
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate dataCadastro;
-	
+
 	public Car() {
 		super();
 	}
 
-	 public Car(long id, String model, String manufacturer, int year, double fipeValue) {
-	        this.id = id;
-	        this.model = model;
-	        this.manufacturer = manufacturer;
-	        this.year = year;
-	        this.fipeValue = fipeValue;
-	        this.drivers = new ArrayList<>();
-	    }
-	
+	public Car(long id, String model, String manufacturer, int year, Double fipeValue, List<Driver> drivers) {
+		this.id = id;
+		this.model = model;
+		this.manufacturer = manufacturer;
+		this.year = year;
+		this.fipeValue = fipeValue;
+	    this.drivers = drivers;
+	}
+
 	@PrePersist
 	public void prePersist() {
 		setDataCadastro(LocalDate.now());
@@ -90,19 +93,19 @@ public class Car implements Serializable{
 		this.manufacturer = manufacturer;
 	}
 
-	public int getYear() {
+	public Integer getYear() {
 		return year;
 	}
 
-	public void setYear(int year) {
+	public void setYear(Integer year) {
 		this.year = year;
 	}
 
-	public double getFipeValue() {
+	public Double getFipeValue() {
 		return fipeValue;
 	}
 
-	public void setFipeValue(double fipeValue) {
+	public void setFipeValue(Double fipeValue) {
 		this.fipeValue = fipeValue;
 	}
 
@@ -120,6 +123,22 @@ public class Car implements Serializable{
 
 	public void setDataCadastro(LocalDate dataCadastro) {
 		this.dataCadastro = dataCadastro;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getPlaca() {
+		return placa;
+	}
+
+	public void setPlaca(String placa) {
+		this.placa = placa;
 	}
 
 }

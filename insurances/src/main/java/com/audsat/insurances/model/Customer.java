@@ -30,7 +30,7 @@ public class Customer implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
+	private Long id;
 	
 	@Column(name = "nome", length = 100)
 	@NotEmpty(message = "{campo.customer.nome.obrigatorio}")
@@ -49,15 +49,7 @@ public class Customer implements Serializable {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "driver_id")
-    private Driver driver; // FK to Driver table
-	
-	public Driver getDriver() {
-		return driver;
-	}
-
-	public void setDriver(Driver driver) {
-		this.driver = driver;
-	}
+    private Driver driver; 
 
 	@Column(name = "data_cadastro", updatable = false)
 	@JsonFormat(pattern = "dd/MM/yyyy")
@@ -72,7 +64,7 @@ public class Customer implements Serializable {
 		this.nome = nome;
 	}
 
-	public Customer(Integer id, String nome, String cpf) {
+	public Customer(Long id, String nome, String cpf) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -85,7 +77,7 @@ public class Customer implements Serializable {
 		this.cpf = cpf;
 	}
 
-	public Customer(int id, String nome) {
+	public Customer(Long id, String nome) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -94,6 +86,14 @@ public class Customer implements Serializable {
 	@PrePersist
 	public void prePersist() {
 		setDataCadastro(LocalDate.now());
+	}
+	
+	public Driver getDriver() {
+		return driver;
+	}
+
+	public void setDriver(Driver driver) {
+		this.driver = driver;
 	}
 
 	public String getNome() {
@@ -104,11 +104,11 @@ public class Customer implements Serializable {
 		this.nome = nome;
 	}
 	
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -124,14 +124,6 @@ public class Customer implements Serializable {
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
-
-//	public Set<Pedido> getPedidos() {
-//		return pedidos;
-//	}
-//
-//	public void setPedidos(Set<Pedido> pedidos) {
-//		this.pedidos = pedidos;
-//	}
 
 	public String getEmail() {
 		return email;

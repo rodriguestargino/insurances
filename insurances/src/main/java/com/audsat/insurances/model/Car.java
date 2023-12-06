@@ -19,6 +19,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Car implements Serializable {
@@ -59,7 +60,8 @@ public class Car implements Serializable {
 	@Transient
 	private boolean hasSinistro; 
 	
-	@OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "car", cascade = CascadeType.PERSIST)
+	@JsonManagedReference
 	private List<Claim> claims;
 
     @ManyToMany(mappedBy = "cars")

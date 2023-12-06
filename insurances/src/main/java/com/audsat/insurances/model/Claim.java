@@ -1,5 +1,6 @@
 package com.audsat.insurances.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -12,10 +13,16 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
-public class Claim {
+public class Claim implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8822237739422927637L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,13 +30,18 @@ public class Claim {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "car_id")
+	@JsonBackReference
     private Car car;
     
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "driver_id")
 	private Driver driver; 
 	
+	@Column(name = "eventDate")
 	private LocalDate eventDate;
+	
+	@Column(name = "tipo")
+	private String tipo;
 	
 	public Car getCar() {
 		return car;
@@ -84,6 +96,22 @@ public class Claim {
 		return Objects.equals(car, other.car) && Objects.equals(dataCadastro, other.dataCadastro)
 				&& Objects.equals(driver, other.driver) && Objects.equals(eventDate, other.eventDate)
 				&& Objects.equals(id, other.id);
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
 	}
 	
 }

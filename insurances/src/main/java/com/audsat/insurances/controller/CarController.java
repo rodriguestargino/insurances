@@ -1,5 +1,8 @@
 package com.audsat.insurances.controller;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.audsat.insurances.model.Car;
+import com.audsat.insurances.model.Claim;
+import com.audsat.insurances.model.request.CarRequest;
+import com.audsat.insurances.model.request.ClaimRequest;
 import com.audsat.insurances.service.CarService;
 
 @RestController
@@ -40,20 +46,48 @@ public class CarController {
 
 	@GetMapping("/findAll")
 	public ResponseEntity<List<Car>> findByAll() {
-	    Optional<List<Car>> carsOptional = carService.getAllCars();
+		Optional<List<Car>> carsOptional = carService.getAllCars();
 
-	    return carsOptional.map(cars -> ResponseEntity.ok(cars))
-	                       .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cars not found"));
+		return carsOptional.map(cars -> ResponseEntity.ok(cars))
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cars not found"));
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Car> create(@RequestBody Car car) {
-	    Optional<Car> carOptional = carService.createCar(car);
+	public ResponseEntity<Car> create(@RequestBody CarRequest carRequest) {
 
-	    return carOptional.map(createdCar -> ResponseEntity.ok(createdCar))
-	    			.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cars coud not be create"));
+		Car car = parsetoBean(carRequest);
+
+		Optional<Car> carOptional = carService.createCar(car);
+
+		return carOptional.map(createdCar -> ResponseEntity.ok(createdCar))
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cars coud not be create"));
 	}
 
+	private Car parsetoBean(CarRequest request) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+		Car bean = new Car();
+
+		bean.setFipeValue(request.getFipeValue());
+		bean.setManufacturer(request.getManufacturer());
+		bean.setModel(request.getModel());
+		bean.setPlaca(request.getPlaca());
+		bean.setYear(request.getYear());
+		bean.setClaims(new ArrayList<Claim>());
+
+		for (ClaimRequest requestClaim : request.getClaims()) {
+			Claim claim = new Claim();
+			claim.setTipo(requestClaim.getTipo());
+			claim.setCar(bean);
+
+			LocalDate eventDate = LocalDate.parse(requestClaim.getEventDate(),formatter);
+
+			claim.setEventDate(eventDate);
+			bean.getClaims().add(claim);
+		}
+
+		return bean;
+	}
 
 }

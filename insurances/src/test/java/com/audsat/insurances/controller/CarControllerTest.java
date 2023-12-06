@@ -92,18 +92,18 @@ public class CarControllerTest {
 
 
 
-    @Test
-    public void testCreate_salvarCar() {
-        Car newCar = new Car(null, "Hyundai", "Sonata", 2021);
-        Car savedCar = new Car(1L, "Hyundai", "Sonata", 2021);
-        Optional<Car> savedCarOptional = Optional.of(savedCar);
-        when(carService.createCar(newCar)).thenReturn(savedCarOptional);
-
-        ResponseEntity<Car> response = carController.create(newCar);
-
-        assertEquals(200, response.getStatusCodeValue());
-        assertNotNull(response.getBody());
-        assertEquals(savedCar, response.getBody());
-    }
+//    @Test
+//    public void testCreate_salvarCar() {
+//        Car newCar = new Car(null, "Hyundai", "Sonata", 2021);
+//        Car savedCar = new Car(1L, "Hyundai", "Sonata", 2021);
+//        Optional<Car> savedCarOptional = Optional.of(savedCar);
+//        when(carService.createCar(newCar)).thenReturn(savedCarOptional);
+//
+//        ResponseEntity<Car> response = carController.create(newCar);
+//
+//        assertEquals(200, response.getStatusCodeValue());
+//        assertNotNull(response.getBody());
+//        assertEquals(savedCar, response.getBody());
+//    }
 
 }

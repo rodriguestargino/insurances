@@ -25,13 +25,14 @@ class InsuranceBudgetProposalControllerTest {
 
 	@Mock
 	private InsuranceBudgetProposalServiceImpl insuranceBudgetProposalService;
-
+	
 	@InjectMocks
 	private InsuranceBudgetProposalController insuranceBudgetProposalController;
 
 	@BeforeEach
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
+		
 	}
 
 	@Test
@@ -100,6 +101,5 @@ class InsuranceBudgetProposalControllerTest {
 
 	    assertEquals(HttpStatus.OK.value(), response.getStatusCodeValue());
 	}
-
-
+	
 }

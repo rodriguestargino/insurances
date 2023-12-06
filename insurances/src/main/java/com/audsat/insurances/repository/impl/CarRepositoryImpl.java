@@ -35,8 +35,10 @@ public abstract class  CarRepositoryImpl implements CarRepository {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Car save(Car car) {
-		entityManager.persist(car);
-		return car;
+		// Persist the car
+	    entityManager.persist(car);
+
+	    return car;
 	}
 
 	@Override

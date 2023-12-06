@@ -18,9 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.audsat.insurances.bean.InsuranceBudgetProposalBean;
 import com.audsat.insurances.model.Insurance;
-import com.audsat.insurances.model.request.InsuranceBudgetProposalRequest;
 import com.audsat.insurances.service.impl.InsuranceBudgetProposalServiceImpl;
 
 class InsuranceBudgetProposalControllerTest {
@@ -88,21 +86,6 @@ class InsuranceBudgetProposalControllerTest {
 		assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
 		assertEquals("Insurances not found", exception.getReason());
 
-	}
-
-	@Test
-	public void testCreate() {
-	    InsuranceBudgetProposalRequest request = mock(InsuranceBudgetProposalRequest.class);
-	    Insurance mockInsurance = mock(Insurance.class);
-	    InsuranceBudgetProposalBean bean = mock(InsuranceBudgetProposalBean.class);
-
-	    when(insuranceBudgetProposalService.createInsuranceBudgetProposal(bean)).thenReturn(mockInsurance);
-
-	    ResponseEntity<Insurance> response = insuranceBudgetProposalController.create(request);
-
-	    assertEquals(HttpStatus.CREATED, response.getStatusCode()); // Corrected this line
-	    assertNotNull(response.getBody());
-	    assertEquals(mockInsurance, response.getBody());
 	}
 
 

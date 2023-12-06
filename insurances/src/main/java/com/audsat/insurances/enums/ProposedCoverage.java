@@ -17,7 +17,4 @@ public enum ProposedCoverage {
         return label;
     }
 
-    public static boolean isValid(String proposedCoverage) {
-        return Arrays.stream(ProposedCoverage.values()).anyMatch(p -> p.getLabel().equalsIgnoreCase(proposedCoverage));
-    }
 }

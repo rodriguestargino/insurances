@@ -1,6 +1,7 @@
 package com.audsat.insurances.bean;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import com.audsat.insurances.model.Car;
 import com.audsat.insurances.model.Customer;
@@ -11,7 +12,7 @@ public class InsuranceBudgetProposalBean {
 	private LocalDate createDt;
 	private LocalDate updateDt;
 	
-	private Car car;
+	private Optional<Car> car;
 	private boolean isActive;
 	private String proposedCoverage;
 	private double estimatedCost;
@@ -34,12 +35,6 @@ public class InsuranceBudgetProposalBean {
 	}
 	public void setUpdateDt(LocalDate updateDt) {
 		this.updateDt = updateDt;
-	}
-	public Car getCar() {
-		return car;
-	}
-	public void setCar(Car car) {
-		this.car = car;
 	}
 	public boolean isActive() {
 		return isActive;
@@ -64,6 +59,12 @@ public class InsuranceBudgetProposalBean {
 	}
 	public void setJustification(String justification) {
 		this.justification = justification;
+	}
+	public Optional<Car> getCar() {
+		return car;
+	}
+	public void setCar(Optional<Car> car) {
+		this.car = car;
 	}
 	
 

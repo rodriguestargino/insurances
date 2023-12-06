@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.audsat.insurances.bean.InsuranceBudgetProposalBean;
 import com.audsat.insurances.enums.ProposedCoverage;
+import com.audsat.insurances.exception.RegraNegocioException;
 import com.audsat.insurances.model.Car;
 import com.audsat.insurances.model.Driver;
 import com.audsat.insurances.model.Insurance;
@@ -37,20 +38,20 @@ public class InsuranceBudgetProposalServiceImpl implements InsuranceBudgetServic
 	            throw new IllegalArgumentException("Invalid proposed coverage: " + insuranceBean.getProposedCoverage());
 	        }
 
-	        if (insuranceBean.getJustification().isEmpty()) {
-	            throw new IllegalArgumentException("Justification cannot be empty");
+	        if (insuranceBean.getJustification() == null || insuranceBean.getJustification().isEmpty()) {
+	            throw new RegraNegocioException("Justificativa Necessária");
 	        }
 
 	        insurance.setCustomer(insuranceBean.getCustomer());
 	        insurance.setCreateDt(insuranceBean.getCreateDt());
 	        insurance.setUpdateDt(insuranceBean.getUpdateDt());
-	        insurance.setCar(insuranceBean.getCar());
+	        insurance.setCar(insuranceBean.getCar().get());
 	        insurance.setActive(insuranceBean.isActive());
 
 	        insurance.setProposedCoverage(insuranceBean.getProposedCoverage());
 	        insurance.setJustification(insuranceBean.getJustification());
 
-	        insurance.setEstimatedCost(calculateInsuranceBudget(insuranceBean.getCar(), insuranceBean.getCustomer().getDriver()));
+	        insurance.setEstimatedCost(calculateInsuranceBudget(insuranceBean.getCar().get(), insuranceBean.getCustomer().getDriver()));
 	        
 	        return insurance;
 	    }

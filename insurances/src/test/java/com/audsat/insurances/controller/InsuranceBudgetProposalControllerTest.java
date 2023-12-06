@@ -2,6 +2,8 @@ package com.audsat.insurances.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Collections;
@@ -12,7 +14,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.audsat.insurances.bean.InsuranceBudgetProposalBean;
 import com.audsat.insurances.model.Insurance;
@@ -33,104 +37,86 @@ class InsuranceBudgetProposalControllerTest {
 	}
 
 	@Test
-	public void testFindById_whenInsuranceFound_shouldReturnOkAndInsurance() {
-	    // Given
-	    long insuranceId = 1L;
-	    Insurance mockInsurance = new Insurance(); // mock insurance object
-	    when(insuranceBudgetProposalService.getInsuranceBudgetProposalById(insuranceId)).thenReturn(mockInsurance);
+	public void testFindById() {
+		long insuranceId = 1L;
+		Insurance mockInsurance = new Insurance(); // mock insurance object
+		when(insuranceBudgetProposalService.getInsuranceBudgetProposalById(insuranceId)).thenReturn(mockInsurance);
 
-	    // When
-	    ResponseEntity<Insurance> response = insuranceBudgetProposalController.findById(insuranceId);
+		ResponseEntity<Insurance> response = insuranceBudgetProposalController.findById(insuranceId);
 
-	    // Then
-	    assertEquals(200, response.getStatusCodeValue());
-	    assertNotNull(response.getBody());
-	    assertEquals(mockInsurance, response.getBody());
+		assertEquals(200, response.getStatusCodeValue());
+		assertNotNull(response.getBody());
+		assertEquals(mockInsurance, response.getBody());
 	}
 
 	@Test
-	public void testFindById_whenInsuranceNotFound_shouldReturnNotFound() {
-		// Given
+	public void testFindById_ReturnNotFound() {
 		long insuranceId = 1L;
 		when(insuranceBudgetProposalService.getInsuranceBudgetProposalById(insuranceId)).thenReturn(null);
 
-		// When
-		ResponseEntity<Insurance> response = insuranceBudgetProposalController.findById(insuranceId);
+		ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+			insuranceBudgetProposalController.findById(insuranceId);
+		});
 
-		// Then
-		assertEquals(404, response.getStatusCodeValue());
+		// Assert the status code
+		assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
+		assertEquals("Insurance not found", exception.getReason());
+
 	}
 
 	@Test
-	public void testFindAll_whenInsurancesFound_shouldReturnOkAndInsuranceList() {
-	    // Given
-	    List<Insurance> mockInsurances = Collections.singletonList(new Insurance()); // mock list of insurances
-	    when(insuranceBudgetProposalService.getAllInsuranceBudgetProposals()).thenReturn(mockInsurances);
+	public void testFindAll() {
+		List<Insurance> mockInsurances = Collections.singletonList(new Insurance()); // mock list of insurances
+		when(insuranceBudgetProposalService.getAllInsuranceBudgetProposals()).thenReturn(mockInsurances);
 
-	    // When
-	    ResponseEntity<List<Insurance>> response = insuranceBudgetProposalController.findByAll();
-
-	    // Then
-	    assertEquals(200, response.getStatusCodeValue());
-	    assertNotNull(response.getBody());
-	    assertEquals(mockInsurances, response.getBody());
-	}
-
-	@Test
-	public void testFindAll_whenNoInsurancesFound_shouldReturnNotFound() {
-		// Given
-		when(insuranceBudgetProposalService.getAllInsuranceBudgetProposals()).thenReturn(Collections.emptyList());
-
-		// When
 		ResponseEntity<List<Insurance>> response = insuranceBudgetProposalController.findByAll();
 
-		// Then
-		assertEquals(404, response.getStatusCodeValue());
+		assertEquals(200, response.getStatusCodeValue());
+		assertNotNull(response.getBody());
+		assertEquals(mockInsurances, response.getBody());
 	}
 
 	@Test
-	public void testCreate_whenValidRequest_shouldReturnOkAndInsurance() {
-	    // Given
-	    InsuranceBudgetProposalRequest request = new InsuranceBudgetProposalRequest(); // mock request object
-	    Insurance mockInsurance = new Insurance(); // mock insurance object
-	    InsuranceBudgetProposalBean bean = null ; // create bean from request
+	public void testFindAll_ReturnNotFound() {
+		when(insuranceBudgetProposalService.getAllInsuranceBudgetProposals()).thenReturn(Collections.emptyList());
+
+		ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+			insuranceBudgetProposalController.findByAll();
+		});
+
+		// Assert the status code
+		assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
+		assertEquals("Insurances not found", exception.getReason());
+
+	}
+
+	@Test
+	public void testCreate() {
+	    InsuranceBudgetProposalRequest request = mock(InsuranceBudgetProposalRequest.class);
+	    Insurance mockInsurance = mock(Insurance.class);
+	    InsuranceBudgetProposalBean bean = mock(InsuranceBudgetProposalBean.class);
+
 	    when(insuranceBudgetProposalService.createInsuranceBudgetProposal(bean)).thenReturn(mockInsurance);
 
-	    // When
 	    ResponseEntity<Insurance> response = insuranceBudgetProposalController.create(request);
 
-	    // Then
-	    assertEquals(200, response.getStatusCodeValue());
+	    assertEquals(HttpStatus.CREATED, response.getStatusCode()); // Corrected this line
 	    assertNotNull(response.getBody());
 	    assertEquals(mockInsurance, response.getBody());
 	}
 
-//	@Test
-//	public void testCreate_whenMissingCustomer_shouldReturnBadRequest() {
-//	    // Given
-//	    InsuranceBudgetProposalRequest request = new InsuranceBudgetProposalRequest(); // create request without customer
-//	    InsuranceBudgetProposalBean requestBean = new InsuranceBudgetProposalBean(); // create request without customer
-//
-//	    
-//	    when(insuranceBudgetProposalService.createInsuranceBudgetProposal(request)).thenThrow(new IllegalArgumentException("Missing customer information"));
-//
-//	    // When
-//	    ResponseEntity<Insurance> response = insuranceBudgetProposalController.create(requestBean);
-//
-//	    // Then
-//	    assertEquals(400, response.getStatusCodeValue());
-//	}
 
 	@Test
-	public void testDeleteById_shouldReturnOk() {
-		// Given
-		long insuranceId = 1L;
+	public void testDeleteById() {
+	    long insuranceId = 1L;
 
-		// When
-		ResponseEntity<Void> response = insuranceBudgetProposalController.deleteById(insuranceId);
+	    Insurance mockInsurance = mock(Insurance.class);
+	    when(insuranceBudgetProposalService.getInsuranceBudgetProposalById(insuranceId)).thenReturn(mockInsurance);
 
-		// Then
-		assertEquals(200, response.getStatusCodeValue());
+	    ResponseEntity<Void> response = insuranceBudgetProposalController.deleteById(insuranceId);
+
+	    assertEquals(HttpStatus.OK.value(), response.getStatusCodeValue());
 	}
+
 
 }

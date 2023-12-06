@@ -21,17 +21,16 @@ public class CarServiceImpl implements CarService {
 	}
 
 	@Override
-	public Car getCarById(long id) {
-		Car car = carRepository.findById(id)
-				  .orElseThrow(() -> new EntityNotFoundException("Car not found with ID: " + id));
-
-		  return car;
+	public Optional<Car> getCarById(long id) {
+	    return carRepository.findById(id);
 	}
+
 
 	@Override
-	public List<Car> getAllCars() {
-		return carRepository.findAll();
+	public Optional<List<Car>> getAllCars() {
+	    return Optional.ofNullable(carRepository.findAll());
 	}
+
 
 	@Override
 	public void deleteCarById(Car car) {
@@ -40,24 +39,24 @@ public class CarServiceImpl implements CarService {
 		  throw new EntityNotFoundException("Car not found with ID: " + car.getId());
 		}
 
-		// Delete customer from the database
 		carRepository.delete(car);
 
 	}
-
+	
 	@Override
-	public Car createCar(Car car) {
-		car = carRepository.save(car);
-		return car;
-
+	public Optional<Car> createCar(Car car) {
+	    try {
+	        return Optional.of(carRepository.save(car));
+	    } catch (Exception e) {
+	        return Optional.empty();
+	    }
 	}
 
-	@Override
-	public Car getCarByPlaca(String placa) {
-		Car car = carRepository.findByPlaca(placa)
-				  .orElseThrow(() -> new EntityNotFoundException("Car not found with Placa: " + placa));
 
-		  return car;
+	@Override
+	public Optional<Car> getCarByPlaca(String placa) {
+		return carRepository.findByPlaca(placa);
+
 	}
 
 }

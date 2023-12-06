@@ -1,20 +1,21 @@
 package com.audsat.insurances.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.audsat.insurances.model.Car;
 
 public interface CarService {
 
-	Car getCarById(long id);
+	Optional<Car> getCarById(long id);
 	
-	Car getCarByPlaca(String placa);
+	Optional<Car> getCarByPlaca(String placa);
 
-	List<Car> getAllCars();
+	Optional<List<Car>> getAllCars();
 
 	void deleteCarById(Car car);
 	
-	Car createCar(Car car);
+	Optional<Car> createCar(Car car);
 
 
 }

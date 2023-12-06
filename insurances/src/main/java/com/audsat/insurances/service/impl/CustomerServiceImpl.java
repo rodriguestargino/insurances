@@ -8,6 +8,7 @@ import javax.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.audsat.insurances.model.Customer;
+import com.audsat.insurances.model.Driver;
 import com.audsat.insurances.repository.CustomerRepository;
 import com.audsat.insurances.service.CustomerService;
 
@@ -47,8 +48,10 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public Customer createCustomer(Customer customer) {
-		customer = customerRepository.save(customer);
-		return customer;
+
+	    customerRepository.save(customer);
+
+	    return customer;
 
 	}
 

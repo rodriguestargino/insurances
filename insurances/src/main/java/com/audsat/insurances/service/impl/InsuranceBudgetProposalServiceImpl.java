@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.audsat.insurances.bean.InsuranceBudgetProposalBean;
 import com.audsat.insurances.enums.ProposedCoverage;
+import com.audsat.insurances.model.Car;
+import com.audsat.insurances.model.Driver;
 import com.audsat.insurances.model.Insurance;
 import com.audsat.insurances.repository.InsuranceBudgetRepository;
 import com.audsat.insurances.service.InsuranceBudgetService;
@@ -29,36 +31,55 @@ public class InsuranceBudgetProposalServiceImpl implements InsuranceBudgetServic
 		        return insuranceBudgetProposalRepository.save(insuranse);
 	    }
 	    
-	    public Insurance parseAndCreateInsurance(InsuranceBudgetProposalBean InsuranceBean, Insurance insurance ) {
+	    public Insurance parseAndCreateInsurance(InsuranceBudgetProposalBean insuranceBean, Insurance insurance ) {
 	        
-	    	if (!isValidProposedCoverage(InsuranceBean.getProposedCoverage())) {
-	            throw new IllegalArgumentException("Invalid proposed coverage: " + InsuranceBean.getProposedCoverage());
+	    	if (!isValidProposedCoverage(insuranceBean.getProposedCoverage())) {
+	            throw new IllegalArgumentException("Invalid proposed coverage: " + insuranceBean.getProposedCoverage());
 	        }
 
-	        if (InsuranceBean.getEstimatedCost() <= 0) {
-	            throw new IllegalArgumentException("Estimated cost must be positive");
-	        }
-
-	        if (InsuranceBean.getJustification().isEmpty()) {
+	        if (insuranceBean.getJustification().isEmpty()) {
 	            throw new IllegalArgumentException("Justification cannot be empty");
 	        }
 
-	        insurance.setCustomer(InsuranceBean.getCustomer());
-	        insurance.setCreateDt(InsuranceBean.getCreateDt());
-	        insurance.setUpdateDt(InsuranceBean.getUpdateDt());
-	        insurance.setCar(InsuranceBean.getCar());
-	        insurance.setActive(InsuranceBean.isActive());
+	        insurance.setCustomer(insuranceBean.getCustomer());
+	        insurance.setCreateDt(insuranceBean.getCreateDt());
+	        insurance.setUpdateDt(insuranceBean.getUpdateDt());
+	        insurance.setCar(insuranceBean.getCar());
+	        insurance.setActive(insuranceBean.isActive());
 
-	        insurance.setProposedCoverage(InsuranceBean.getProposedCoverage());
-	        insurance.setEstimatedCost(InsuranceBean.getEstimatedCost());
-	        insurance.setJustification(InsuranceBean.getJustification());
+	        insurance.setProposedCoverage(insuranceBean.getProposedCoverage());
+	        insurance.setJustification(insuranceBean.getJustification());
 
+	        insurance.setEstimatedCost(calculateInsuranceBudget(insuranceBean.getCar(), insuranceBean.getCustomer().getDriver()));
+	        
 	        return insurance;
 	    }
 	    
 	    private boolean isValidProposedCoverage(String proposedCoverage) {
 	        return Arrays.asList(ProposedCoverage.FULL_COVERAGE.getLabel(), ProposedCoverage.LIABILITY_COVERAGE.getLabel(), ProposedCoverage.COLLISION_COVERAGE.getLabel()).contains(proposedCoverage);
 	    }
+	    
+	    public double calculateInsuranceBudget(Car car, Driver driver) {
+
+	        double baseBudget = car.getFipeValue() * 0.06;
+
+	        // Adicione os custos adicionais para cada risco mapeado
+
+	        if (driver.getIdade() <= 25) {
+	            baseBudget += baseBudget * 0.02;
+	        }
+
+	        if (driver.hasSinistro()) {
+	            baseBudget += baseBudget * 0.02;
+	        }
+
+	        if (car.hasSinistro()) {
+	            baseBudget += baseBudget * 0.02;
+	        }
+
+	        return baseBudget;
+	    }
+
 
 	    @Override
 	    public Insurance getInsuranceBudgetProposalById(long id) {

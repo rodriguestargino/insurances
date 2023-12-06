@@ -2,6 +2,7 @@ package com.audsat.insurances.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -21,7 +22,7 @@ public class Insurance implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -8992909347886365373L;
+	private static final long serialVersionUID = 885821565484421104L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -136,6 +137,29 @@ public class Insurance implements Serializable {
 
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(car, createDt, customer, estimatedCost, id, isActive, justification, proposedCoverage,
+				updateDt);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Insurance other = (Insurance) obj;
+		return Objects.equals(car, other.car) && Objects.equals(createDt, other.createDt)
+				&& Objects.equals(customer, other.customer)
+				&& Double.doubleToLongBits(estimatedCost) == Double.doubleToLongBits(other.estimatedCost)
+				&& Objects.equals(id, other.id) && isActive == other.isActive
+				&& Objects.equals(justification, other.justification)
+				&& Objects.equals(proposedCoverage, other.proposedCoverage) && Objects.equals(updateDt, other.updateDt);
 	}
 
 }

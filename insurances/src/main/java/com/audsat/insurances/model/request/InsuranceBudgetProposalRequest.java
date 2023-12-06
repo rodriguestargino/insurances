@@ -10,7 +10,6 @@ public class InsuranceBudgetProposalRequest {
 	private String placa;
 	private boolean isActive;
 	private String proposedCoverage;
-	private double estimatedCost;
 	private String justification;
 
 	public LocalDate getCreateDt() {
@@ -59,14 +58,6 @@ public class InsuranceBudgetProposalRequest {
 
 	public void setProposedCoverage(String proposedCoverage) {
 		this.proposedCoverage = proposedCoverage;
-	}
-
-	public double getEstimatedCost() {
-		return estimatedCost;
-	}
-
-	public void setEstimatedCost(double estimatedCost) {
-		this.estimatedCost = estimatedCost;
 	}
 
 	public String getJustification() {

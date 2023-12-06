@@ -40,7 +40,7 @@ public class CustomerController {
 	public ResponseEntity<List<Customer>> findByAll() {
 		List<Customer> customer = customerService.getAllCustomers();
 
-		if (customer == null) {
+		if (customer == null || customer.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		} else {
 			return ResponseEntity.ok(customer);

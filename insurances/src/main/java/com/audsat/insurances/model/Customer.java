@@ -2,7 +2,9 @@ package com.audsat.insurances.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -21,12 +23,12 @@ import org.hibernate.validator.constraints.br.CPF;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
-public class Customer implements Serializable {
+public class Customer implements Serializable{
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1288462622002229765L;
+	private static final long serialVersionUID = 3441660331312909286L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -47,8 +49,9 @@ public class Customer implements Serializable {
 	@NotNull
 	private String email;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "driver_id")
+	@NotNull
     private Driver driver; 
 
 	@Column(name = "data_cadastro", updatable = false)
@@ -83,6 +86,14 @@ public class Customer implements Serializable {
 		this.nome = nome;
 	}
 	
+	public Customer(long customerId, String string, String string2, String string3) {
+		// TODO Auto-generated constructor stub
+	}
+
+	public Customer(Object object, String string, String string2, String string3) {
+		// TODO Auto-generated constructor stub
+	}
+
 	@PrePersist
 	public void prePersist() {
 		setDataCadastro(LocalDate.now());
@@ -139,6 +150,25 @@ public class Customer implements Serializable {
 
 	public void setDataCadastro(LocalDate dataCadastro) {
 		this.dataCadastro = dataCadastro;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(cpf, dataCadastro, driver, email, id, nome);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Customer other = (Customer) obj;
+		return Objects.equals(cpf, other.cpf) && Objects.equals(dataCadastro, other.dataCadastro)
+				&& Objects.equals(driver, other.driver) && Objects.equals(email, other.email)
+				&& Objects.equals(id, other.id) && Objects.equals(nome, other.nome);
 	}
 
 }

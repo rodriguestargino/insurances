@@ -95,7 +95,6 @@ public class InsuranceBudgetProposalController {
 
 		  bean.setActive(request.isActive());
 		  bean.setProposedCoverage(request.getProposedCoverage());
-		  bean.setEstimatedCost(request.getEstimatedCost());
 		  bean.setJustification(request.getJustification());
 
 		  return bean;

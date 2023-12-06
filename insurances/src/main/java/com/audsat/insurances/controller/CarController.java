@@ -40,7 +40,7 @@ public class CarController {
 	public ResponseEntity<List<Car>> findByAll() {
 		List<Car> car = carService.getAllCars();
 
-		if (car == null) {
+		if (car == null || car.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		} else {
 			return ResponseEntity.ok(car);

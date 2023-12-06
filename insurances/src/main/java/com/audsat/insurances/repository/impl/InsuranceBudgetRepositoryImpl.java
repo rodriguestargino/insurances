@@ -8,7 +8,7 @@ import javax.persistence.EntityManager;
 import com.audsat.insurances.model.Insurance;
 import com.audsat.insurances.repository.InsuranceBudgetRepository;
 
-public abstract class  InsuranceBudgetRepositoryImpl implements InsuranceBudgetRepository {
+public abstract class InsuranceBudgetRepositoryImpl implements InsuranceBudgetRepository {
 
 	private final EntityManager entityManager;
 
